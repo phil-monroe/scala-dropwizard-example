@@ -10,12 +10,14 @@ import scala.concurrent.duration.Duration
 import example.philmonroe.api.github.Branch
 import com.wordnik.swagger.annotations.{ApiParam, ApiOperation, Api}
 import com.codahale.metrics.annotation.{ExceptionMetered, Metered, Timed}
+import org.slf4j.LoggerFactory
 
 
 @Path("/status")
 @Api("GitHub-Status")
 @Produces(Array(MediaType.APPLICATION_JSON))
 class GitHubStatusResource(gitHub: GithubAPI) {
+  val LOG = LoggerFactory.getLogger(this.getClass)
 
   @GET
   @Timed(name = "checkRepo-timing")
@@ -24,10 +26,9 @@ class GitHubStatusResource(gitHub: GithubAPI) {
   @ApiOperation(value = "Check Repo Status", notes = "Checks the build status for every branch in the given GitHub repositories.")
   def checkRepo(@QueryParam("repos")
                 @ApiParam(allowMultiple = true, value = "Comma separated list of GitHub repos", defaultValue = "dropwizard/dropwizard")
-                repos: String = "dropwizard/dropwizard"
-                 ): Seq[RepoStatus] = {
+                repos: String): Seq[RepoStatus] = {
 
-    repos
+    Option(repos).getOrElse("dropwizard/dropwizard")
       .split(",")
       .map(fetchRepoStatus)
       .map(await)
