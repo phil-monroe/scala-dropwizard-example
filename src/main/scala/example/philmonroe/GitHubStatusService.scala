@@ -1,6 +1,5 @@
 package example.philmonroe
 
-import com.massrelevance.dropwizard.ScalaApplication
 import io.dropwizard.setup.{Environment, Bootstrap}
 import example.philmonroe.resources.{GitHubStatusResource, HelloWorldResource}
 import com.wordnik.swagger.config.ScannerFactory
@@ -13,9 +12,13 @@ import io.dropwizard.assets.AssetsBundle
 import io.dropwizard.client.JerseyClientBuilder
 import example.philmonroe.clients.GithubAPI
 import example.philmonroe.healthchecks.GitHubHealthCheck
+import io.dropwizard.Application
+import org.slf4j.LoggerFactory
 
 
-object GitHubStatusService extends ScalaApplication[GitHubStatusConfig] {
+class GitHubStatusService extends Application[GitHubStatusConfig] {
+  val LOG = LoggerFactory.getLogger(this.getClass)
+
   override def getName = "GitHub Status"
 
   override def initialize(bootstrap: Bootstrap[GitHubStatusConfig]): Unit = {
@@ -31,6 +34,8 @@ object GitHubStatusService extends ScalaApplication[GitHubStatusConfig] {
   }
 
   override def run(config: GitHubStatusConfig, env: Environment): Unit = {
+    LOG.info("Starting with sha: " + BuildInfo.GitSha)
+
     // HTTP Client
     val httpClient = new JerseyClientBuilder(env).using(config.httpClientConfig).build("http-client")
 
@@ -50,5 +55,11 @@ object GitHubStatusService extends ScalaApplication[GitHubStatusConfig] {
 
     // Health Checks
     env.healthChecks().register("GitHub", new GitHubHealthCheck(gitHub))
+  }
+}
+
+object GitHubStatusService {
+  final def main(args: Array[String]) = {
+    (new GitHubStatusService).run(args)
   }
 }
