@@ -5,9 +5,6 @@ import javax.ws.rs.core.MediaType
 import example.philmonroe.api.github.{RateLimitResponse, Branch, Status}
 
 
-
-
-
 class GithubAPI(httpClient: Client, token: String, endpoint: String = "https://api.github.com") {
   val UserAgent = "Github Status Example App - phil-monroe/scala-dropwizard-example"
   val AuthorizationHeader = s"token ${token}"

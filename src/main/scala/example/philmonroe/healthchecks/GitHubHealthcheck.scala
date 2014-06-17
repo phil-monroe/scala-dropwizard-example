@@ -1,12 +1,14 @@
 package example.philmonroe.healthchecks
 
-import example.philmonroe.clients.GithubAPI
 import com.codahale.metrics.health.HealthCheck
 import com.codahale.metrics.health.HealthCheck.Result
+import example.philmonroe.setup.bundles.GithubBundle
 
 
-class GitHubHealthCheck(gitHub: GithubAPI) extends HealthCheck {
+class GitHubHealthCheck(gitHubBundle: GithubBundle) extends HealthCheck {
   override def check(): Result = {
+    val gitHub = gitHubBundle.githubClient
+
     val rateLimit = gitHub.getRateLimit().rate
     val message = s"remaining: ${rateLimit.remaining}"
 
