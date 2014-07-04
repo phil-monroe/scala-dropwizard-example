@@ -10,6 +10,8 @@ object Dependencies {
   val dropwizardScala = "com.massrelevance" %% "dropwizard-scala" % DropwizardVerison
   val dropwizardTesting = "io.dropwizard" % "dropwizard-testing" % DropwizardVerison
 
+  val hbc = "com.twitter" % "hbc-core" % "2.0.2"
+
   val swaggerCore = "com.wordnik" %% "swagger-core" % SwaggerVersion
   val swaggerJaxRs = "com.wordnik" %% "swagger-jaxrs" % SwaggerVersion
   val scalaTest = "org.scalatest" %% "scalatest" % "2.1.7"
@@ -20,6 +22,8 @@ object Dependencies {
     dropwizardScala,
     dropwizardClient,
     dropwizardAssets,
+
+    hbc,
 
     swaggerCore,
     swaggerJaxRs exclude("javax.ws.rs", "jsr311-api")

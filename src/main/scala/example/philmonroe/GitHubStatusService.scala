@@ -5,7 +5,7 @@ import example.philmonroe.resources.{GitHubStatusResource, HelloWorldResource}
 import com.massrelevance.dropwizard.bundles.ScalaBundle
 import io.dropwizard.Application
 import example.philmonroe.setup.Logging
-import example.philmonroe.setup.bundles.{ExceptionMapperBundle, GithubBundle, HealthcheckBundle, SwaggerBundle}
+import example.philmonroe.setup.bundles._
 
 
 class GitHubStatusService extends Application[GitHubStatusConfig] with Logging {
@@ -15,6 +15,7 @@ class GitHubStatusService extends Application[GitHubStatusConfig] with Logging {
   val swaggerBundle = new SwaggerBundle
   val exceptionMapperBundle = new ExceptionMapperBundle
   val githubBundle = new GithubBundle
+  val tweetStreamBundle = new TweetStreamBundle
   val healthcheckBundle = new HealthcheckBundle(githubBundle)
 
   override def initialize(bootstrap: Bootstrap[GitHubStatusConfig]): Unit = {
@@ -23,6 +24,7 @@ class GitHubStatusService extends Application[GitHubStatusConfig] with Logging {
     bootstrap.addBundle(exceptionMapperBundle)
     bootstrap.addBundle(githubBundle)
     bootstrap.addBundle(healthcheckBundle)
+    bootstrap.addBundle(tweetStreamBundle)
   }
 
   override def run(config: GitHubStatusConfig, env: Environment): Unit = {

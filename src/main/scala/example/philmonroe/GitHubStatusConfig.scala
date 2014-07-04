@@ -4,6 +4,8 @@ import io.dropwizard.Configuration
 import javax.validation.constraints.NotNull
 import io.dropwizard.client.JerseyClientConfiguration
 import com.fasterxml.jackson.annotation.JsonProperty
+import example.philmonroe.setup.config.TwitterConfig
+import javax.validation.Valid
 
 
 class GitHubStatusConfig extends Configuration {
@@ -15,5 +17,8 @@ class GitHubStatusConfig extends Configuration {
   val gitHubToken = Option(System.getenv(GitHubTokenEnvVar)).getOrElse(DefaultGitHubToken)
 
   val httpClientConfig = new JerseyClientConfiguration
+
+  @Valid
+  val twitter = new TwitterConfig
 }
 
