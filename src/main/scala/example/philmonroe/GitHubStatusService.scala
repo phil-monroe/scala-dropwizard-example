@@ -1,7 +1,7 @@
 package example.philmonroe
 
 import io.dropwizard.setup.{Environment, Bootstrap}
-import example.philmonroe.resources.{GitHubStatusResource, HelloWorldResource}
+import example.philmonroe.resources.{SearchResource, GitHubStatusResource, HelloWorldResource}
 import com.massrelevance.dropwizard.bundles.ScalaBundle
 import io.dropwizard.Application
 import example.philmonroe.setup.Logging
@@ -15,7 +15,8 @@ class GitHubStatusService extends Application[GitHubStatusConfig] with Logging {
   val swaggerBundle = new SwaggerBundle
   val exceptionMapperBundle = new ExceptionMapperBundle
   val githubBundle = new GithubBundle
-  val tweetStreamBundle = new TweetStreamBundle
+  val elasticSearchBundle = new ElasticSearchBundle
+  val tweetStreamBundle = new TweetStreamBundle(elasticSearchBundle)
   val healthcheckBundle = new HealthcheckBundle(githubBundle)
 
   override def initialize(bootstrap: Bootstrap[GitHubStatusConfig]): Unit = {
@@ -24,6 +25,7 @@ class GitHubStatusService extends Application[GitHubStatusConfig] with Logging {
     bootstrap.addBundle(exceptionMapperBundle)
     bootstrap.addBundle(githubBundle)
     bootstrap.addBundle(healthcheckBundle)
+    bootstrap.addBundle(elasticSearchBundle)
     bootstrap.addBundle(tweetStreamBundle)
   }
 
@@ -33,6 +35,7 @@ class GitHubStatusService extends Application[GitHubStatusConfig] with Logging {
     // Resources
     env.jersey().register(new HelloWorldResource)
     env.jersey().register(new GitHubStatusResource(githubBundle.githubClient))
+    env.jersey().register(new SearchResource(elasticSearchBundle.elasticsearch, env.getObjectMapper))
   }
 }
 

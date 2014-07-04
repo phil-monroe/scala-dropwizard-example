@@ -10,5 +10,6 @@ case class Tweet(created_at: String,
                  id: Long,
                  text: String,
                  truncated: Boolean,
-                 user: User
+                 user: User,
+                  time: Long = 0
                   )
