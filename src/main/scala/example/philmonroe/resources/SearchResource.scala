@@ -20,7 +20,7 @@ class SearchResource(elasticsearch: ManagedElasticSearchClient, mapper: ObjectMa
   @ApiOperation(value = "Searches throgh tweets", notes = "", produces = MediaType.APPLICATION_JSON)
   def search = {
     val res = elasticsearch.search("twitter", "tweets", QueryBuilders.termQuery("text", "salsa"))
-    res.getHits.map{ hit =>
+    res.getHits.map { hit =>
       val tweet = mapper.readValue(hit.getSourceAsString, classOf[Tweet])
       SearchResponse(tweet)
     }

@@ -9,9 +9,6 @@ import com.wordnik.swagger.jaxrs.reader.DefaultJaxrsApiReader
 import io.dropwizard.assets.AssetsBundle
 import com.wordnik.swagger.jaxrs.listing.ApiListingResourceJSON
 
-/**
- * Created by phil on 6/4/14.
- */
 class SwaggerBundle extends Bundle {
   override def initialize(bootstrap: Bootstrap[_]): Unit = {
     // Swagger

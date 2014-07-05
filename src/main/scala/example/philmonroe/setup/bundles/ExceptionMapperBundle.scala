@@ -6,9 +6,6 @@ import javax.ws.rs.ext.ExceptionMapper
 import example.philmonroe.setup.exceptionmappers.RuntimeExceptionMapper
 import scala.collection.JavaConversions._
 
-/**
- * Created by phil on 6/4/14.
- */
 class ExceptionMapperBundle extends Bundle {
   override def initialize(bootstrap: Bootstrap[_]): Unit = {
   }

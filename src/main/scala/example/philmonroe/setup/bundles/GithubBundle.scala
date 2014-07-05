@@ -6,9 +6,6 @@ import example.philmonroe.clients.GithubAPI
 import example.philmonroe.GitHubStatusConfig
 import io.dropwizard.client.JerseyClientBuilder
 
-/**
- * Created by phil on 6/4/14.
- */
 class GithubBundle extends ConfiguredBundle[GitHubStatusConfig] {
   var githubClient: GithubAPI = _
 

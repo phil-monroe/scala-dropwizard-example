@@ -10,9 +10,6 @@ import com.twitter.hbc.ClientBuilder
 import com.twitter.hbc.core.processor.StringDelimitedProcessor
 import example.philmonroe.setup.config.TwitterConfig
 
-/**
- * Created by phil on 7/3/14.
- */
 class ManagedTweetStream(config: TwitterConfig) extends Managed {
   val queue = new LinkedBlockingQueue[String](100000);
 
