@@ -6,15 +6,11 @@ import java.util.concurrent.{TimeUnit, LinkedBlockingQueue}
 import example.philmonroe.api.twitter.Tweet
 import example.philmonroe.core.elasticsearch.ManagedElasticSearchClient
 import java.text.SimpleDateFormat
+import io.dropwizard.lifecycle.Managed
 
-
-/**
- * Created by phil on 7/3/14.
- */
-class TweetProcessor(queue: LinkedBlockingQueue[String], objectMapper: ObjectMapper, esClient: ManagedElasticSearchClient) extends Runnable with Logging {
-  val dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy")
-
-  var should_process = true
+class TweetProcessor(identifier: Int, queue: LinkedBlockingQueue[String], objectMapper: ObjectMapper, elasticSearch: ManagedElasticSearchClient) extends Managed with Runnable with Logging {
+  private val dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy")
+  private var should_process = true
 
   override def run(): Unit = {
 
@@ -24,16 +20,19 @@ class TweetProcessor(queue: LinkedBlockingQueue[String], objectMapper: ObjectMap
           var tweet = objectMapper.readValue(msg.trim, classOf[Tweet])
           tweet = tweet.copy(time = dateFormat.parse(tweet.created_at).getTime)
 
-          esClient.index("twitter", "tweets", tweet.id.toString, objectMapper.writeValueAsString(tweet))
+          elasticSearch.index("twitter", "tweets", tweet.id, tweet)
 
-          LOG.debug(tweet.toString)
+          LOG.info(s"[$identifier] $tweet")
         }
       } catch {
         case e: Throwable => LOG.error("Failed to handle tweet", e)
       }
-
     }
   }
 
-  def logMap(map: Map[String, Any]) = println(map)
+  def start(): Unit = {}
+
+  def stop(): Unit = {
+    should_process = false
+  }
 }
