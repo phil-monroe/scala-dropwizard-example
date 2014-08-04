@@ -6,6 +6,7 @@ import io.searchbox.client.config.HttpClientConfig
 import io.searchbox.client.JestClientFactory
 import io.searchbox.core.{Search, Index}
 import io.searchbox.core.search.sort.Sort
+import io.searchbox.indices.{CreateIndex, DeleteIndex}
 
 
 class ManagedElasticSearchClient(url: String) extends Managed with Logging {
@@ -41,5 +42,19 @@ class ManagedElasticSearchClient(url: String) extends Managed with Logging {
     sort.map(search.addSort)
 
     client.execute(search.build())
+  }
+
+  def createIndex(index: String) = {
+    LOG.info(s"Creating index: $index")
+    val res = client.execute(new CreateIndex.Builder(index).build)
+    LOG.info(res.getJsonString)
+    res
+  }
+
+  def dropIndex(index: String) = {
+    LOG.info(s"Dropping index: $index")
+    val res = client.execute(new DeleteIndex.Builder(index).build)
+    LOG.info(res.getJsonString)
+    res
   }
 }
