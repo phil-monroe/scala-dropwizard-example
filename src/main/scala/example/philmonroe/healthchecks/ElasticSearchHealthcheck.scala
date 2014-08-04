@@ -2,13 +2,14 @@ package example.philmonroe.healthchecks
 
 import com.codahale.metrics.health.HealthCheck
 import com.codahale.metrics.health.HealthCheck.Result
-import example.philmonroe.core.tweet_stream.ManagedTweetStream
+import example.philmonroe.core.elasticsearch.ManagedElasticSearchClient
 
-class ElasticSearchHealthcheck(tweetStream: ManagedTweetStream) extends HealthCheck {
+class ElasticSearchHealthcheck(elasticSearch: ManagedElasticSearchClient) extends HealthCheck {
   override def check(): Result = {
-    if (tweetStream.hosebird.isDone)
-      Result.unhealthy("Tweet Stream has finished!")
-    else
+    val res = elasticSearch.status
+    if (res.isSucceeded)
       Result.healthy()
+    else
+      Result.unhealthy(res.getJsonString)
   }
 }
