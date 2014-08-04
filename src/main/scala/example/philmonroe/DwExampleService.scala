@@ -33,7 +33,7 @@ class DwExampleService extends Application[DwExampleConfig] with Logging {
     // Resources
     env.jersey().register(new HelloWorldResource)
     env.jersey().register(new TimeResource)
-    env.jersey().register(new SearchResource(elasticSearchBundle.elasticsearch, env.getObjectMapper))
+    env.jersey().register(new SearchResource(elasticSearchBundle.elasticsearch))
   }
 }
 

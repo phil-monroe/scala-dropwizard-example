@@ -12,6 +12,7 @@ object Dependencies {
 
   val hbc = "com.twitter" % "hbc-core" % "2.0.2"
   val elasticSearch =  "org.elasticsearch" % "elasticsearch" % "1.2.1"
+  val jest =  "io.searchbox" % "jest" % "0.1.2"
 
   val swaggerCore = "com.wordnik" %% "swagger-core" % SwaggerVersion
   val swaggerJaxRs = "com.wordnik" %% "swagger-jaxrs" % SwaggerVersion
@@ -26,6 +27,7 @@ object Dependencies {
 
     hbc,
     elasticSearch,
+    jest,
 
     swaggerCore,
     swaggerJaxRs exclude("javax.ws.rs", "jsr311-api")

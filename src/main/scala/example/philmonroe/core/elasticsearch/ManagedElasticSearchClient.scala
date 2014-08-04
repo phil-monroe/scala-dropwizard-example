@@ -2,45 +2,44 @@ package example.philmonroe.core.elasticsearch
 
 import io.dropwizard.lifecycle.Managed
 import example.philmonroe.setup.Logging
-import org.elasticsearch.client.transport.TransportClient
-import org.elasticsearch.common.transport.InetSocketTransportAddress
-import org.elasticsearch.action.search.{SearchRequestBuilder, SearchType}
-import org.elasticsearch.index.query.QueryBuilder
-import com.fasterxml.jackson.databind.ObjectMapper
+import io.searchbox.client.config.HttpClientConfig
+import io.searchbox.client.JestClientFactory
+import io.searchbox.core.{Search, Index}
+import io.searchbox.core.search.sort.Sort
 
 
-class ManagedElasticSearchClient(mapper: ObjectMapper) extends Managed with Logging {
-  val client = new TransportClient()
-  client.addTransportAddress(new InetSocketTransportAddress("localhost", 9300))
+class ManagedElasticSearchClient(url: String) extends Managed with Logging {
+  val clientConfig = new HttpClientConfig.Builder(url).multiThreaded(true).build()
+
+  val factory = new JestClientFactory()
+  factory.setHttpClientConfig(clientConfig)
+  val client = factory.getObject
 
 
   override def start(): Unit = {
   }
 
   override def stop(): Unit = {
-    client.close()
+    client.shutdownClient()
   }
 
   def index(index: String, typ: String, id: Any, doc: Any) = {
-    client.prepareIndex(index, typ)
-      .setId(id.toString)
-      .setSource(mapper.writeValueAsString(doc))
-      .execute()
-      .actionGet()
+    val idx = new Index.Builder(doc)
+      .`type`(typ)
+      .id(id.toString)
+      .index(index)
+
+    client.execute(idx.build())
   }
 
-  def search(index: String, typ: String, query: QueryBuilder, options: (SearchRequestBuilder) => Unit = identity) = {
-    val search = client.prepareSearch(index)
-      .setTypes(typ)
-      .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-      .setQuery(query)
-      .setFrom(0)
-      .setSize(60)
+  def search(index: String, typ: String, query: String, sort: Option[Sort] = None) = {
+    val search = new Search.Builder(query)
+      .addIndex(index)
+      .addType(typ)
+      .addSort(new Sort("time", Sort.Sorting.DESC))
 
-    options(search)
+    sort.map(search.addSort)
 
-    search
-      .execute()
-      .actionGet()
+    client.execute(search.build())
   }
 }

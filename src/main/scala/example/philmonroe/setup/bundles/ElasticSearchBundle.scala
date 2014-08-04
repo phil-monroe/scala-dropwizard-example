@@ -13,7 +13,7 @@ class ElasticSearchBundle extends ConfiguredBundle[DwExampleConfig] {
   }
 
   override def run(config: DwExampleConfig, env: Environment): Unit = {
-    elasticsearch = new ManagedElasticSearchClient(env.getObjectMapper)
+    elasticsearch = new ManagedElasticSearchClient(config.elasticSearchUrl)
     env.lifecycle().manage(elasticsearch)
   }
 }

@@ -1,33 +1,33 @@
 package example.philmonroe.resources
 
-import javax.ws.rs.{GET, Produces, Path}
+import javax.ws.rs.{QueryParam, GET, Produces, Path}
 import javax.ws.rs.core.MediaType
 import com.wordnik.swagger.annotations.{ApiOperation, Api}
 import example.philmonroe.core.elasticsearch.ManagedElasticSearchClient
-import scala.collection.JavaConversions._
 import example.philmonroe.api.twitter.Tweet
-import com.fasterxml.jackson.databind.ObjectMapper
+import io.searchbox.core.search.sort.Sort
 import org.elasticsearch.index.query.QueryBuilders
-import org.elasticsearch.search.sort.SortOrder
-
-case class SearchResponse(tweet: Tweet, score: Double)
+import org.elasticsearch.search.builder.SearchSourceBuilder
+import scala.collection.JavaConversions._
 
 @Path("/search")
 @Api(value = "/search", description = "Searches through tweets.")
 @Produces(Array(MediaType.APPLICATION_JSON))
-class SearchResource(elasticsearch: ManagedElasticSearchClient, mapper: ObjectMapper) {
+class SearchResource(elasticsearch: ManagedElasticSearchClient) {
 
   @GET
   @ApiOperation(value = "Searches throgh tweets", notes = "", produces = MediaType.APPLICATION_JSON)
-  def search = {
-    val query = QueryBuilders.termQuery("text", "salsa")
+  def search(@QueryParam("q") queryStr: String) = {
 
-    val res = elasticsearch.search("twitter", "tweets", query, _.addSort("time", SortOrder.DESC))
 
-    res.getHits.map { hit =>
-      SearchResponse(hit.getSourceAsString, hit.score)
-    }
+    val bool = QueryBuilders.boolQuery()
+    Option(queryStr).getOrElse("scala").split(",").foreach(q => bool.should(QueryBuilders.matchPhraseQuery("text", q)))
+
+    val queryBuilder = new SearchSourceBuilder
+    queryBuilder.query(bool)
+
+    val res = elasticsearch.search("twitter", "tweets", queryBuilder.toString, Some(new Sort("time", Sort.Sorting.DESC)))
+
+    res.getHits(classOf[Tweet]).map(_.source)
   }
-
-  implicit def json2Tweet(json: String): Tweet = mapper.readValue(json, classOf[Tweet])
 }
