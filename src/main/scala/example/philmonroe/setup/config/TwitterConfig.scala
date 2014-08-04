@@ -1,6 +1,5 @@
 package example.philmonroe.setup.config
 
-import javax.validation.constraints.NotNull
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.hibernate.validator.constraints.NotEmpty
 
