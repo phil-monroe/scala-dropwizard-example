@@ -35,6 +35,6 @@ buildInfoKeys := Seq[BuildInfoKey](
 
 buildInfoPackage := "example.philmonroe"
 
-addCommandAlias("server", ";run server config.yml")
+addCommandAlias("server", ";run server")
 
-addCommandAlias("stage", ";assembly")
+addCommandAlias("stage", ";info")
