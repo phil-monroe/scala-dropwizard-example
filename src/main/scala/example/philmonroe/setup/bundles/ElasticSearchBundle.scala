@@ -5,6 +5,9 @@ import io.dropwizard.setup.{Environment, Bootstrap}
 import example.philmonroe.DwExampleConfig
 import example.philmonroe.core.elasticsearch.ManagedElasticSearchClient
 import example.philmonroe.tasks.{CreateIndexTask, DropIndexTask}
+import example.philmonroe.healthchecks.ElasticSearchHealthcheck
+import example.philmonroe.metrics.ElasticSearchMeter
+
 
 class ElasticSearchBundle extends ConfiguredBundle[DwExampleConfig] {
   var elasticsearch: ManagedElasticSearchClient = null
@@ -21,5 +24,8 @@ class ElasticSearchBundle extends ConfiguredBundle[DwExampleConfig] {
 
     env.admin().addTask(new CreateIndexTask(elasticsearch))
     env.admin().addTask(new DropIndexTask(elasticsearch))
+
+    env.healthChecks().register("elasticsearch", new ElasticSearchHealthcheck(elasticsearch))
+    env.metrics().register("elasticsearch", new ElasticSearchMeter(env.getObjectMapper, elasticsearch))
   }
 }
