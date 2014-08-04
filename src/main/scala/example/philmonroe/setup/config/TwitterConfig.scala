@@ -22,5 +22,5 @@ class TwitterConfig {
   val oauthSecret: String = System.getenv("TWITTER_OAUTH_SECRET")
 
   @JsonProperty
-  val topics = Seq.empty[String]
+  val topics = Option(System.getenv("TWITTER_TOPICS")).map(_.split(",").toSeq).getOrElse(Seq.empty[String])
 }
