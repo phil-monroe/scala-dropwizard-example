@@ -1,0 +1,6 @@
+server:
+  type: simple
+  applicationContextPath: "" # intentionally left blank
+  connector:
+    type: http
+    port: 8080
