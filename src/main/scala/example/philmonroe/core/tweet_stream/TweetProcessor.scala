@@ -22,7 +22,7 @@ class TweetProcessor(identifier: Int, queue: LinkedBlockingQueue[String], object
 
           elasticSearch.index("twitter", "tweets", tweet.id, tweet)
 
-        // LOG.info(s"[$identifier] $tweet")
+          LOG.info(s"[$identifier] $tweet")
         }
       } catch {
         case e: Throwable => LOG.error("Failed to handle tweet", e)
