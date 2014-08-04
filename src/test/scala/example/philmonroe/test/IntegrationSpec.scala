@@ -1,7 +1,7 @@
 package example.philmonroe.test
 
 import org.scalatest.{Matchers, FunSpec}
-import example.philmonroe.GitHubStatusService
+import example.philmonroe.DwExampleService
 import net.sourceforge.argparse4j.inf.Namespace
 import com.google.common.collect.ImmutableMap
 import org.eclipse.jetty.server.{ServerConnector, Server}
@@ -10,15 +10,15 @@ import io.dropwizard.lifecycle.ServerLifecycleListener
 import io.dropwizard.cli.ServerCommand
 import org.slf4j.LoggerFactory
 import com.sun.jersey.api.client.Client
-import example.philmonroe.GitHubStatusService
-import example.philmonroe.GitHubStatusConfig
+import example.philmonroe.DwExampleService
+import example.philmonroe.DwExampleConfig
 
 object TestRuntime extends ServerLifecycleListener {
   val LOG = LoggerFactory.getLogger(this.getClass)
 
   val configPath = this.getClass.getResource("/config.yml").getPath
   var jettyServer: Option[Server] = None
-  var config: Option[GitHubStatusConfig] = None
+  var config: Option[DwExampleConfig] = None
   var env: Option[Environment] = None
 
   def getLocalPort: Int = {
@@ -34,11 +34,11 @@ object TestRuntime extends ServerLifecycleListener {
     if (jettyServer.isDefined)
       return
 
-    val application = new GitHubStatusService
+    val application = new DwExampleService
     val bootstrap = new TestServerBootstrap(application)
     application.initialize(bootstrap)
 
-    val command = new ServerCommand[GitHubStatusConfig](application)
+    val command = new ServerCommand[DwExampleConfig](application)
     val namespace = new Namespace(ImmutableMap.of[String, AnyRef]("file", configPath))
     command.run(bootstrap, namespace)
 
@@ -48,8 +48,8 @@ object TestRuntime extends ServerLifecycleListener {
     }
   }
 
-  class TestServerBootstrap(app: GitHubStatusService) extends Bootstrap(app) {
-    override def run(configuration: GitHubStatusConfig, environment: Environment) {
+  class TestServerBootstrap(app: DwExampleService) extends Bootstrap(app) {
+    override def run(configuration: DwExampleConfig, environment: Environment) {
       config = Option(configuration)
       env = Option(environment)
       environment.lifecycle.addServerLifecycleListener(TestRuntime)

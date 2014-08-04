@@ -2,23 +2,24 @@ package example.philmonroe.setup.config
 
 import javax.validation.constraints.NotNull
 import com.fasterxml.jackson.annotation.JsonProperty
+import org.hibernate.validator.constraints.NotEmpty
 
 class TwitterConfig {
-  @NotNull
+  @NotEmpty
   @JsonProperty
-  val apiKey: String = null
+  val apiKey: String = System.getenv("TWITTER_API_KEY")
 
-  @NotNull
+  @NotEmpty
   @JsonProperty
-  val apiSecret: String = null
+  val apiSecret: String = System.getenv("TWITTER_API_SECRET")
 
-  @NotNull
+  @NotEmpty
   @JsonProperty
-  val oauthToken: String = null
+  val oauthToken: String = System.getenv("TWITTER_OAUTH_TOKEN")
 
-  @NotNull
+  @NotEmpty
   @JsonProperty
-  val oauthSecret: String = null
+  val oauthSecret: String = System.getenv("TWITTER_OAUTH_SECRET")
 
   @JsonProperty
   val topics = Seq.empty[String]

@@ -8,8 +8,9 @@ import scala.collection.JavaConversions._
 import example.philmonroe.api.twitter.Tweet
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.elasticsearch.index.query.QueryBuilders
+import org.elasticsearch.search.sort.SortOrder
 
-case class SearchResponse(tweet: Tweet)
+case class SearchResponse(tweet: Tweet, score: Double)
 
 @Path("/search")
 @Api(value = "/search", description = "Searches through tweets.")
@@ -19,10 +20,14 @@ class SearchResource(elasticsearch: ManagedElasticSearchClient, mapper: ObjectMa
   @GET
   @ApiOperation(value = "Searches throgh tweets", notes = "", produces = MediaType.APPLICATION_JSON)
   def search = {
-    val res = elasticsearch.search("twitter", "tweets", QueryBuilders.termQuery("text", "salsa"))
+    val query = QueryBuilders.termQuery("text", "salsa")
+
+    val res = elasticsearch.search("twitter", "tweets", query, _.addSort("time", SortOrder.DESC))
+
     res.getHits.map { hit =>
-      val tweet = mapper.readValue(hit.getSourceAsString, classOf[Tweet])
-      SearchResponse(tweet)
+      SearchResponse(hit.getSourceAsString, hit.score)
     }
   }
+
+  implicit def json2Tweet(json: String): Tweet = mapper.readValue(json, classOf[Tweet])
 }

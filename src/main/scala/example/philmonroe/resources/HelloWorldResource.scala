@@ -6,7 +6,7 @@ import com.wordnik.swagger.annotations.{ApiOperation, Api}
 
 @Path("/helloworld")
 @Api(value = "/helloworld", description = "Hello World API Example2222.")
-@Produces(Array(MediaType.TEXT_PLAIN))
+@Produces(Array(MediaType.APPLICATION_JSON))
 class HelloWorldResource {
 
   @GET

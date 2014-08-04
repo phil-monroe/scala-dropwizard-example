@@ -7,7 +7,7 @@ version := Git.version("1.0")
 
 scalaVersion := "2.10.4"
 
-mainClass in(Compile, run) := Some("example.philmonroe.GitHubStatusService")
+mainClass in(Compile, run) := Some("example.philmonroe.DwExampleService")
 
 libraryDependencies ++= ProjectDependencies ++ TestDependencies
 
@@ -35,4 +35,4 @@ buildInfoKeys := Seq[BuildInfoKey](
 
 buildInfoPackage := "example.philmonroe"
 
-addCommandAlias("server", ";run server")
+addCommandAlias("server", ";run server config.yml")
