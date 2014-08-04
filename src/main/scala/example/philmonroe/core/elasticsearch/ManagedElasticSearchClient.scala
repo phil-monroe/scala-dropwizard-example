@@ -6,7 +6,7 @@ import io.searchbox.client.config.HttpClientConfig
 import io.searchbox.client.JestClientFactory
 import io.searchbox.core.{Search, Index}
 import io.searchbox.core.search.sort.Sort
-import io.searchbox.indices.{CreateIndex, DeleteIndex}
+import io.searchbox.indices.{Status, CreateIndex, DeleteIndex}
 import io.searchbox.cluster.Health
 
 
@@ -59,5 +59,5 @@ class ManagedElasticSearchClient(url: String) extends Managed with Logging {
     res
   }
 
-  def status = client.execute(new Health.Builder().build)
+  def status = client.execute(new Status.Builder().build)
 }

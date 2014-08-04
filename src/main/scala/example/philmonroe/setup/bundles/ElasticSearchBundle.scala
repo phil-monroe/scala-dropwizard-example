@@ -6,7 +6,7 @@ import example.philmonroe.DwExampleConfig
 import example.philmonroe.core.elasticsearch.ManagedElasticSearchClient
 import example.philmonroe.tasks.{CreateIndexTask, DropIndexTask}
 import example.philmonroe.healthchecks.ElasticSearchHealthcheck
-import example.philmonroe.metrics.ElasticSearchMeter
+import example.philmonroe.metrics.ElasticSearchNumDocsGauge
 
 
 class ElasticSearchBundle extends ConfiguredBundle[DwExampleConfig] {
@@ -26,6 +26,7 @@ class ElasticSearchBundle extends ConfiguredBundle[DwExampleConfig] {
     env.admin().addTask(new DropIndexTask(elasticsearch))
 
     env.healthChecks().register("elasticsearch", new ElasticSearchHealthcheck(elasticsearch))
-    env.metrics().register("elasticsearch", new ElasticSearchMeter(env.getObjectMapper, elasticsearch))
+
+    env.metrics().register("elasticsearch.twitter.num_docs", new ElasticSearchNumDocsGauge(env.getObjectMapper, elasticsearch, "twitter"))
   }
 }
