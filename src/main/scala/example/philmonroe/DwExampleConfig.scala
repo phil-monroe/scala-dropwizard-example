@@ -20,5 +20,9 @@ class DwExampleConfig extends Configuration {
   @Valid
   @NotNull
   val elasticSearchUrl = System.getenv("BONSAI_URL")
+
+  @Valid
+  @NotNull
+  val hostname = System.getenv("HOSTNAME")
 }
 

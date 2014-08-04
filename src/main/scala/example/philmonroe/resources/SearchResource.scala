@@ -2,7 +2,7 @@ package example.philmonroe.resources
 
 import javax.ws.rs.{QueryParam, GET, Produces, Path}
 import javax.ws.rs.core.MediaType
-import com.wordnik.swagger.annotations.{ApiOperation, Api}
+import com.wordnik.swagger.annotations.{ApiParam, ApiOperation, Api}
 import example.philmonroe.core.elasticsearch.ManagedElasticSearchClient
 import example.philmonroe.api.twitter.Tweet
 import io.searchbox.core.search.sort.Sort
@@ -17,7 +17,7 @@ class SearchResource(elasticsearch: ManagedElasticSearchClient) {
 
   @GET
   @ApiOperation(value = "Searches throgh tweets", notes = "", produces = MediaType.APPLICATION_JSON)
-  def search(@QueryParam("q") queryStr: String) = {
+  def search(@QueryParam("q") @ApiParam("query string") queryStr: String) = {
 
 
     val bool = QueryBuilders.boolQuery()
