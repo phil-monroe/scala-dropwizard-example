@@ -59,5 +59,7 @@ class ManagedElasticSearchClient(url: String) extends Managed with Logging {
     res
   }
 
-  def status = client.execute(new Status.Builder().build)
+  def status = {
+    client.execute(new Status.Builder().addIndex("twitter").build)
+  }
 }
