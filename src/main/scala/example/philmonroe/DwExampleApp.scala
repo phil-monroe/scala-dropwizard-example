@@ -8,7 +8,7 @@ import example.philmonroe.setup.Logging
 import example.philmonroe.setup.bundles._
 
 
-class DwExampleService extends Application[DwExampleConfig] with Logging {
+class DwExampleApp extends Application[DwExampleConfig] with Logging {
   override def getName = "Dropwizard Example"
 
   val scalaBundle = new ScalaBundle
@@ -37,8 +37,8 @@ class DwExampleService extends Application[DwExampleConfig] with Logging {
   }
 }
 
-object DwExampleService {
+object DwExampleApp {
   final def main(args: Array[String]) = {
-    (new DwExampleService).run(args)
+    (new DwExampleApp).run(args)
   }
 }

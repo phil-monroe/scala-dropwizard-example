@@ -1,7 +1,7 @@
 package example.philmonroe.test
 
 import org.scalatest.{Matchers, FunSpec}
-import example.philmonroe.DwExampleService
+import example.philmonroe.DwExampleApp
 import net.sourceforge.argparse4j.inf.Namespace
 import com.google.common.collect.ImmutableMap
 import org.eclipse.jetty.server.{ServerConnector, Server}
@@ -10,7 +10,7 @@ import io.dropwizard.lifecycle.ServerLifecycleListener
 import io.dropwizard.cli.ServerCommand
 import org.slf4j.LoggerFactory
 import com.sun.jersey.api.client.Client
-import example.philmonroe.DwExampleService
+import example.philmonroe.DwExampleApp
 import example.philmonroe.DwExampleConfig
 
 object TestRuntime extends ServerLifecycleListener {
@@ -34,7 +34,7 @@ object TestRuntime extends ServerLifecycleListener {
     if (jettyServer.isDefined)
       return
 
-    val application = new DwExampleService
+    val application = new DwExampleApp
     val bootstrap = new TestServerBootstrap(application)
     application.initialize(bootstrap)
 
@@ -48,7 +48,7 @@ object TestRuntime extends ServerLifecycleListener {
     }
   }
 
-  class TestServerBootstrap(app: DwExampleService) extends Bootstrap(app) {
+  class TestServerBootstrap(app: DwExampleApp) extends Bootstrap(app) {
     override def run(configuration: DwExampleConfig, environment: Environment) {
       config = Option(configuration)
       env = Option(environment)

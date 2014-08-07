@@ -9,6 +9,7 @@ import io.searchbox.core.search.sort.Sort
 import org.elasticsearch.index.query.QueryBuilders
 import org.elasticsearch.search.builder.SearchSourceBuilder
 import scala.collection.JavaConversions._
+import com.codahale.metrics.annotation.{ExceptionMetered, Metered}
 
 @Path("/search")
 @Api(value = "/search", description = "Searches through tweets.")
@@ -16,6 +17,8 @@ import scala.collection.JavaConversions._
 class SearchResource(elasticsearch: ManagedElasticSearchClient) {
 
   @GET
+  @Metered
+  @ExceptionMetered(name = "search-errors")
   @ApiOperation(value = "Searches throgh tweets", notes = "", produces = MediaType.APPLICATION_JSON)
   def search(@QueryParam("q") @ApiParam("query string") queryStr: String) = {
 
