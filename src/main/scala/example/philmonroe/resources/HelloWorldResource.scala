@@ -12,7 +12,7 @@ class HelloWorldResource {
 
   @GET
   @Metered
-  @ExceptionMetered(name = "search-errors")
+  @ExceptionMetered(name = "hello-errors")
   @ApiOperation(value = "Say Hello World!", notes = "Greets the World.", response = classOf[String], produces = MediaType.TEXT_PLAIN)
   def helloWorld: String = {
     "Hello World"

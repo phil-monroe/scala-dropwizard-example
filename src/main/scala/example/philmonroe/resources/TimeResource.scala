@@ -14,7 +14,7 @@ class TimeResource {
 
   @GET
   @Metered
-  @ExceptionMetered(name = "search-errors")
+  @ExceptionMetered(name = "time-errors")
   @ApiOperation(value = "getTime", response = classOf[Time], produces = MediaType.APPLICATION_JSON)
   def getTime: Time = {
     Time(currentTime)
