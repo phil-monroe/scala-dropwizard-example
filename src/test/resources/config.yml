@@ -1,1 +1,8 @@
-gitHubToken: c526fbbe8e986379dc98eca3342b8ca4a2e6d954
+twitter:
+  apiKey:      "key"
+  apiSecret:   "secret"
+  oauthToken:  "token"
+  oauthSecret: "secret"
+
+elasticSearchUrl: http://localhost:9200
+hostname:         localhsot:8080

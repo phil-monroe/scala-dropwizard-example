@@ -11,18 +11,13 @@ import example.philmonroe.setup.bundles._
 class DwExampleApp extends Application[DwExampleConfig] with Logging {
   override def getName = "Dropwizard Example"
 
-  val scalaBundle = new ScalaBundle
-  val swaggerBundle = new SwaggerBundle
-  val exceptionMapperBundle = new ExceptionMapperBundle
   val elasticSearchBundle = new ElasticSearchBundle
   val tweetStreamBundle = new TweetStreamBundle(elasticSearchBundle)
-  val healthcheckBundle = new HealthcheckBundle()
 
   override def initialize(bootstrap: Bootstrap[DwExampleConfig]): Unit = {
-    bootstrap.addBundle(scalaBundle)
-    bootstrap.addBundle(swaggerBundle)
-    bootstrap.addBundle(exceptionMapperBundle)
-    bootstrap.addBundle(healthcheckBundle)
+    bootstrap.addBundle(new ScalaBundle)
+    bootstrap.addBundle(new SwaggerBundle)
+    bootstrap.addBundle(new ExceptionMapperBundle)
     bootstrap.addBundle(elasticSearchBundle)
     bootstrap.addBundle(tweetStreamBundle)
   }
@@ -33,7 +28,7 @@ class DwExampleApp extends Application[DwExampleConfig] with Logging {
     // Resources
     env.jersey().register(new HelloWorldResource)
     env.jersey().register(new TimeResource)
-    env.jersey().register(new SearchResource(elasticSearchBundle.elasticsearch))
+    env.jersey().register(new SearchResource(elasticSearchBundle.elasticsearch.get))
   }
 }
 

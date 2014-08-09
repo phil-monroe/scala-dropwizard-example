@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull
 import example.philmonroe.setup.config.TwitterConfig
 import javax.validation.Valid
 import io.dropwizard.server.{SimpleServerFactory, ServerFactory}
+import com.fasterxml.jackson.annotation.JsonProperty
 
 
 class DwExampleConfig extends Configuration {
@@ -17,12 +18,13 @@ class DwExampleConfig extends Configuration {
   val twitter = new TwitterConfig
 
 
-  @Valid
   @NotNull
+  @JsonProperty
   val elasticSearchUrl = System.getenv("BONSAI_URL")
 
-  @Valid
+
   @NotNull
+  @JsonProperty
   val hostname = System.getenv("HOSTNAME")
 }
 

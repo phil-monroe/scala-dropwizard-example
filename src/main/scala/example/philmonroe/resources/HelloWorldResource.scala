@@ -6,7 +6,7 @@ import com.wordnik.swagger.annotations.{ApiOperation, Api}
 import com.codahale.metrics.annotation.{ExceptionMetered, Metered}
 
 @Path("/helloworld")
-@Api(value = "/helloworld", description = "Hello World API Example2222.")
+@Api(value = "/helloworld", description = "Hello World API Example.")
 @Produces(Array(MediaType.TEXT_PLAIN))
 class HelloWorldResource {
 

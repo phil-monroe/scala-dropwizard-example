@@ -10,7 +10,7 @@ import com.twitter.hbc.ClientBuilder
 import com.twitter.hbc.core.processor.StringDelimitedProcessor
 import example.philmonroe.setup.config.TwitterConfig
 
-class ManagedTweetStream(config: TwitterConfig) extends Managed {
+class TweetStream(config: TwitterConfig) extends Managed {
   val queue = new LinkedBlockingQueue[String](100000);
 
   val hosebirdEndpoint = new StatusesFilterEndpoint()

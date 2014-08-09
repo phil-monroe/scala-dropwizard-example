@@ -10,14 +10,16 @@ import example.philmonroe.metrics.ElasticSearchNumDocsGauge
 
 
 class ElasticSearchBundle extends ConfiguredBundle[DwExampleConfig] {
-  var elasticsearch: ManagedElasticSearchClient = null
+  var elasticsearch: Option[ManagedElasticSearchClient] = None
 
   override def initialize(bootstrap: Bootstrap[_]): Unit = {
 
   }
 
   override def run(config: DwExampleConfig, env: Environment): Unit = {
-    elasticsearch = new ManagedElasticSearchClient(config.elasticSearchUrl)
+    val elasticsearch = new ManagedElasticSearchClient(config.elasticSearchUrl)
+    this.elasticsearch = Some(elasticsearch)
+
     env.lifecycle().manage(elasticsearch)
 
     elasticsearch.createIndex("twitter")
@@ -28,5 +30,6 @@ class ElasticSearchBundle extends ConfiguredBundle[DwExampleConfig] {
     env.healthChecks().register("elasticsearch", new ElasticSearchHealthcheck(elasticsearch))
 
     env.metrics().register("elasticsearch.twitter.num_docs", new ElasticSearchNumDocsGauge(env.getObjectMapper, elasticsearch, "twitter"))
+
   }
 }
